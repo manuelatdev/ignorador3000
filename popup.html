@@ -13,14 +13,14 @@
       <img src="icons/icon48.png" alt="Icon" width="48" height="48">
       <section>
         Ignorador3000
-        <small>Gestiona tus listas:</small>
+        <small>Lista de personas, y palabras, especiales:</small>
       </section>
     </h1>
     <div class="tabs">
-      <button class="tab-button active" id="tabIgnoredUsers">Usuarios Ignorados</button>
-      <button class="tab-button" id="tabIgnoredWords">Palabras Excluidas</button>
+      <button class="tab-button active" id="tabIgnoredWords">Palabras Excluidas</button>
+      <button class="tab-button" id="tabIgnoredUsers">Usuarios Ignorados</button>
     </div>
-    <div id="ignoredUsersTab" class="tab-content">
+    <div id="ignoredUsersTab" class="tab-content hidden">
       <div id="ignoredListContainer" class="hidden">
         <span id="copyIcon" class="copy-icon">content_copy</span>
         <div id="ignoredList"></div>
@@ -31,7 +31,7 @@
         <button id="clearButton">Limpiar</button>
       </div>
     </div>
-    <div id="ignoredWordsTab" class="tab-content hidden">
+    <div id="ignoredWordsTab" class="tab-content">
       <input type="text" id="wordInput" placeholder="Añadir palabra...">
       <button id="addWordButton">Añadir</button>
       <div id="ignoredWordsListContainer">

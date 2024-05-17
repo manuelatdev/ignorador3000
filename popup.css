@@ -38,13 +38,13 @@ h1 section small {
   padding: 10px;
   cursor: pointer;
   text-align: center;
-  background-color: #f1f1f1;
+  background-color: #a8a8a8;
   border: none;
   outline: none;
 }
 
 .tab-button.active {
-  background-color: #ddd;
+  background-color: #464646;
 }
 
 .tab-content {
@@ -71,11 +71,16 @@ button {
 }
 
 button:hover {
-  background-color: #45a049;
+  background-color: #3f3f3f;
+}
+
+button#fetchButton{
+  display: none;
 }
 
 button#clearButton {
   background-color: #f44336;
+  display: none;
 }
 
 button#clearButton:hover {
@@ -109,21 +114,25 @@ button#copyButton:hover {
 }
 
 #ignoredList {
-  padding-top: 10px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 #ignoredWordsListContainer {
   position: relative;
   max-height: 200px;
   overflow-y: auto;
-  margin-top: 20px;
+  margin: 20px 0px;
   border: 1px solid #ccc;
-  padding: 10px;
+  padding: 3px;
   background-color: #fff;
 }
 
 #ignoredWordsList {
-  padding-top: 10px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .copy-icon {
@@ -148,13 +157,47 @@ button#copyButton:hover {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 5px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
 .ignored-word {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 5px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  padding-left: 5px;
+  font-weight: 600;
+}
+
+.ignored-word:hover {
+  background-color: #666;
+}
+
+.ignored-word:nth-child(odd) {
+  background-color: #ffffff; 
+}
+
+.ignored-word:nth-child(even) {
+  background-color: #f0f0f0c0; 
+}
+
+.ignored-word span {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  margin-right: 10px;
+}
+
+.ignored-word button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #333;
+  margin: 0px;
 }
 
 .hidden {
@@ -162,7 +205,7 @@ button#copyButton:hover {
 }
 
 #emptyMessage, #wordsEmptyMessage {
-  margin-top: 20px;
+  margin: 20px 0px;
   color: #666;
   font-size: 14px;
   text-align: center;
@@ -171,4 +214,13 @@ button#copyButton:hover {
 #buttonsContainer, #wordsButtonsContainer {
   display: flex;
   justify-content: flex-end;
+}
+
+/* Ocultar barras de desplazamiento verticales */
+#ignoredListContainer::-webkit-scrollbar {
+  display: none;
+}
+
+#ignoredWordsListContainer::-webkit-scrollbar {
+  display: none;
 }

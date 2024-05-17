@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   tabIgnoredUsers.addEventListener('click', function(event) {
     openTab(event, 'ignoredUsersTab');
+    fetchIgnoredUsers(); // Actualizar la lista de usuarios ignorados solo al abrir la pestaña
   });
 
   tabIgnoredWords.addEventListener('click', function(event) {
@@ -52,7 +53,18 @@ document.addEventListener('DOMContentLoaded', function() {
       words.forEach(word => {
         const wordDiv = document.createElement('div');
         wordDiv.classList.add('ignored-word');
-        wordDiv.textContent = word;
+        
+        const wordSpan = document.createElement('span');
+        wordSpan.textContent = word;
+
+        const removeButton = document.createElement('button');
+        removeButton.innerHTML = '<span class="material-symbols-outlined">close</span>';
+        removeButton.addEventListener('click', function() {
+          removeWordFromIgnoredList(word);
+        });
+
+        wordDiv.appendChild(wordSpan);
+        wordDiv.appendChild(removeButton);
         ignoredWordsListDiv.appendChild(wordDiv);
       });
     }
@@ -101,6 +113,18 @@ document.addEventListener('DOMContentLoaded', function() {
       chrome.storage.local.set({ ignoredWords }, function() {
         updateIgnoredWordsList(ignoredWords);
         wordInput.value = '';
+        refreshPage();
+      });
+    });
+  }
+
+  function removeWordFromIgnoredList(word) {
+    chrome.storage.local.get('ignoredWords', function(data) {
+      const ignoredWords = data.ignoredWords || [];
+      const updatedWords = ignoredWords.filter(w => w !== word);
+      chrome.storage.local.set({ ignoredWords: updatedWords }, function() {
+        updateIgnoredWordsList(updatedWords);
+        refreshPage();
       });
     });
   }
@@ -142,6 +166,7 @@ document.addEventListener('DOMContentLoaded', function() {
       console.log('Ignored words list cleared');
       // Actualizar la lista de palabras ignoradas en el popup
       updateIgnoredWordsList([]);
+      refreshPage();
     });
   });
 
@@ -153,20 +178,27 @@ document.addEventListener('DOMContentLoaded', function() {
     updateIgnoredWordsList(words);
   });
 
-  // Actualizar automáticamente la lista de ignorados al abrir el popup por primera vez
-  fetchIgnoredUsers();
+  // Mostrar la pestaña de palabras ignoradas por defecto
+  tabIgnoredWords.click();
 
-  // Mostrar la primera pestaña por defecto
-  tabIgnoredUsers.click();
+  function refreshPage() {
+    chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+      const activeTab = tabs[0];
+      if (activeTab && activeTab.url.includes('forocoches.com/foro/')) {
+        chrome.tabs.reload(activeTab.id);
+      }
+    });
+  }
+  
+  function openTab(event, tabName) {
+    const tabContents = document.querySelectorAll('.tab-content');
+    tabContents.forEach(content => content.classList.add('hidden'));
+
+    const tabButtons = document.querySelectorAll('.tab-button');
+    tabButtons.forEach(button => button.classList.remove('active'));
+
+    document.getElementById(tabName).classList.remove('hidden');
+    event.currentTarget.classList.add('active');
+  }
+
 });
-
-function openTab(event, tabName) {
-  const tabContents = document.querySelectorAll('.tab-content');
-  tabContents.forEach(content => content.classList.add('hidden'));
-
-  const tabButtons = document.querySelectorAll('.tab-button');
-  tabButtons.forEach(button => button.classList.remove('active'));
-
-  document.getElementById(tabName).classList.remove('hidden');
-  event.currentTarget.classList.add('active');
-}
