@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Ignorador3000</title>
+    <script src="popup.js"></script>
+    <link rel="stylesheet" type="text/css" href="popup.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+  </head>
+  <body>
+    <h1>
+      <img src="icons/icon48.png" alt="Icon" width="48" height="48">
+      <section>
+        Ignorador3000
+        <small>Mi lista de gente especial:</small>
+      </section>
+    </h1>
+    <div id="ignoredListContainer" class="hidden">
+      <span id="copyIcon" class="copy-icon">content_copy</span>
+      <div id="ignoredList"></div>
+    </div>
+    <div id="emptyMessage">La lista de usuarios ignorados está vacía.</div>
+    <div id="buttonsContainer">
+      <button class="hidden" id="fetchButton">Actualizar</button>
+      <button class="hidden" id="clearButton">Limpiar</button>
+    </div>
+  </body>
+</html>
