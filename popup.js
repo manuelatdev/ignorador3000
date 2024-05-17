@@ -5,6 +5,24 @@ document.addEventListener('DOMContentLoaded', function() {
   const ignoredListDiv = document.getElementById('ignoredList');
   const emptyMessage = document.getElementById('emptyMessage');
   const ignoredListContainer = document.getElementById('ignoredListContainer');
+  const wordInput = document.getElementById('wordInput');
+  const addWordButton = document.getElementById('addWordButton');
+  const ignoredWordsListDiv = document.getElementById('ignoredWordsList');
+  const wordsEmptyMessage = document.getElementById('wordsEmptyMessage');
+  const ignoredWordsListContainer = document.getElementById('ignoredWordsListContainer');
+  const clearWordsButton = document.getElementById('clearWordsButton');
+  const tabIgnoredUsers = document.getElementById('tabIgnoredUsers');
+  const tabIgnoredWords = document.getElementById('tabIgnoredWords');
+  const ignoredUsersTab = document.getElementById('ignoredUsersTab');
+  const ignoredWordsTab = document.getElementById('ignoredWordsTab');
+
+  tabIgnoredUsers.addEventListener('click', function(event) {
+    openTab(event, 'ignoredUsersTab');
+  });
+
+  tabIgnoredWords.addEventListener('click', function(event) {
+    openTab(event, 'ignoredWordsTab');
+  });
 
   function updateIgnoredList(userNames) {
     ignoredListDiv.innerHTML = ''; // Limpiar la lista antes de añadir nuevos elementos
@@ -19,6 +37,23 @@ document.addEventListener('DOMContentLoaded', function() {
         userDiv.classList.add('ignored-user');
         userDiv.textContent = userName;
         ignoredListDiv.appendChild(userDiv);
+      });
+    }
+  }
+
+  function updateIgnoredWordsList(words) {
+    ignoredWordsListDiv.innerHTML = ''; // Limpiar la lista antes de añadir nuevos elementos
+    if (words.length === 0) {
+      wordsEmptyMessage.classList.remove('hidden');
+      ignoredWordsListContainer.classList.add('hidden');
+    } else {
+      wordsEmptyMessage.classList.add('hidden');
+      ignoredWordsListContainer.classList.remove('hidden');
+      words.forEach(word => {
+        const wordDiv = document.createElement('div');
+        wordDiv.classList.add('ignored-word');
+        wordDiv.textContent = word;
+        ignoredWordsListDiv.appendChild(wordDiv);
       });
     }
   }
@@ -56,6 +91,20 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
+  function addWordToIgnoredList() {
+    const newWord = wordInput.value.trim();
+    if (newWord === '') return;
+
+    chrome.storage.local.get('ignoredWords', function(data) {
+      const ignoredWords = data.ignoredWords || [];
+      ignoredWords.push(newWord);
+      chrome.storage.local.set({ ignoredWords }, function() {
+        updateIgnoredWordsList(ignoredWords);
+        wordInput.value = '';
+      });
+    });
+  }
+
   fetchButton.addEventListener('click', fetchIgnoredUsers);
 
   clearButton.addEventListener('click', function() {
@@ -79,12 +128,45 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
-  // Cargar la lista de ignorados almacenada al abrir el popup
-  chrome.storage.local.get('ignoredUsers', function(data) {
+  addWordButton.addEventListener('click', addWordToIgnoredList);
+
+  wordInput.addEventListener('keypress', function(event) {
+    if (event.key === 'Enter') {
+      addWordToIgnoredList();
+    }
+  });
+
+  clearWordsButton.addEventListener('click', function() {
+    // Limpiar la lista de palabras ignoradas en chrome.storage
+    chrome.storage.local.remove('ignoredWords', function() {
+      console.log('Ignored words list cleared');
+      // Actualizar la lista de palabras ignoradas en el popup
+      updateIgnoredWordsList([]);
+    });
+  });
+
+  // Cargar la lista de ignorados y palabras almacenadas al abrir el popup
+  chrome.storage.local.get(['ignoredUsers', 'ignoredWords'], function(data) {
     const userNames = data.ignoredUsers || [];
+    const words = data.ignoredWords || [];
     updateIgnoredList(userNames);
+    updateIgnoredWordsList(words);
   });
 
   // Actualizar automáticamente la lista de ignorados al abrir el popup por primera vez
   fetchIgnoredUsers();
+
+  // Mostrar la primera pestaña por defecto
+  tabIgnoredUsers.click();
 });
+
+function openTab(event, tabName) {
+  const tabContents = document.querySelectorAll('.tab-content');
+  tabContents.forEach(content => content.classList.add('hidden'));
+
+  const tabButtons = document.querySelectorAll('.tab-button');
+  tabButtons.forEach(button => button.classList.remove('active'));
+
+  document.getElementById(tabName).classList.remove('hidden');
+  event.currentTarget.classList.add('active');
+}

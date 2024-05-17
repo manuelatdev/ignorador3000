@@ -1,120 +1,174 @@
 body {
-    font-family: 'Inter', sans-serif;
-    margin: 0;
-    padding: 20px;
-    width: 300px;
-    background-color: #f9f9f9;
-  }
-  
-  h1 {
-    display: flex;
-    align-items: center;
-    font-size: 18px;
-    margin-bottom: 20px;
-    color: #333;
-  }
-  
-  h1 img {
-    margin-right: 10px;
-  }
-  
-  h1 section {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  h1 section small {
-    margin-top: 4px;
-    font-size: 12px;
-    color: #999;
-  }
-  
-  button {
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 12px;
-    margin: 4px 2px;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-  }
-  
-  button:hover {
-    background-color: #45a049;
-  }
-  
-  button#clearButton {
-    background-color: #f44336;
-  }
-  
-  button#clearButton:hover {
-    background-color: #d32f2f;
-  }
-  
-  button#copyButton {
-    background-color: #008CBA;
-  }
-  
-  button#copyButton:hover {
-    background-color: #007bb5;
-  }
-  
-  #ignoredListContainer {
-    position: relative;
-    max-height: 200px;
-    overflow-y: auto;
-    margin-top: 20px;
-    border: 1px solid #ccc;
-    padding: 10px;
-    background-color: #fff;
-  }
-  
-  #ignoredList {
-    padding-top: 10px;
-  }
-  
-  .copy-icon {
-    font-family: 'Material Symbols Outlined';
-    font-size: 24px;
-    color: #008CBA;
-    cursor: pointer;
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    z-index: 1;
-  }
-  
-  #ignoredListContainer:hover .copy-icon {
-    opacity: 1;
-  }
-  
-  .ignored-user {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 5px;
-  }
-  
-  .hidden {
-    display: none;
-  }
-  
-  #emptyMessage {
-    margin-top: 20px;
-    color: #666;
-    font-size: 14px;
-    text-align: center;
-  }
-  
-  #buttonsContainer {
-    text-align: right;
-    margin-top: 10px;
-  }
-  
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  padding: 20px;
+  width: 300px;
+  background-color: #f9f9f9;
+}
+
+h1 {
+  display: flex;
+  align-items: center;
+  font-size: 18px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+h1 img {
+  margin-right: 10px;
+}
+
+h1 section {
+  display: flex;
+  flex-direction: column;
+}
+
+h1 section small {
+  font-size: 12px;
+  color: #999;
+}
+
+.tabs {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.tab-button {
+  flex: 1;
+  padding: 10px;
+  cursor: pointer;
+  text-align: center;
+  background-color: #f1f1f1;
+  border: none;
+  outline: none;
+}
+
+.tab-button.active {
+  background-color: #ddd;
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content:not(.hidden) {
+  display: block;
+}
+
+button {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 12px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+button#clearButton {
+  background-color: #f44336;
+}
+
+button#clearButton:hover {
+  background-color: #d32f2f;
+}
+
+button#clearWordsButton {
+  background-color: #f44336;
+}
+
+button#clearWordsButton:hover {
+  background-color: #d32f2f;
+}
+
+button#copyButton {
+  background-color: #008CBA;
+}
+
+button#copyButton:hover {
+  background-color: #007bb5;
+}
+
+#ignoredListContainer {
+  position: relative;
+  max-height: 200px;
+  overflow-y: auto;
+  margin-top: 20px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  background-color: #fff;
+}
+
+#ignoredList {
+  padding-top: 10px;
+}
+
+#ignoredWordsListContainer {
+  position: relative;
+  max-height: 200px;
+  overflow-y: auto;
+  margin-top: 20px;
+  border: 1px solid #ccc;
+  padding: 10px;
+  background-color: #fff;
+}
+
+#ignoredWordsList {
+  padding-top: 10px;
+}
+
+.copy-icon {
+  font-family: 'Material Symbols Outlined';
+  font-size: 24px;
+  color: #008CBA;
+  cursor: pointer;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 1;
+}
+
+#ignoredListContainer:hover .copy-icon {
+  opacity: 1;
+}
+
+.ignored-user {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.ignored-word {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.hidden {
+  display: none;
+}
+
+#emptyMessage, #wordsEmptyMessage {
+  margin-top: 20px;
+  color: #666;
+  font-size: 14px;
+  text-align: center;
+}
+
+#buttonsContainer, #wordsButtonsContainer {
+  display: flex;
+  justify-content: flex-end;
+}

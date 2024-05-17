@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <title>Ignorador3000</title>
-    <script src="popup.js"></script>
+    <script src="popup.js" defer></script>
     <link rel="stylesheet" type="text/css" href="popup.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
@@ -13,17 +13,34 @@
       <img src="icons/icon48.png" alt="Icon" width="48" height="48">
       <section>
         Ignorador3000
-        <small>Mi lista de gente especial:</small>
+        <small>Gestiona tus listas:</small>
       </section>
     </h1>
-    <div id="ignoredListContainer" class="hidden">
-      <span id="copyIcon" class="copy-icon">content_copy</span>
-      <div id="ignoredList"></div>
+    <div class="tabs">
+      <button class="tab-button active" id="tabIgnoredUsers">Usuarios Ignorados</button>
+      <button class="tab-button" id="tabIgnoredWords">Palabras Excluidas</button>
     </div>
-    <div id="emptyMessage">La lista de usuarios ignorados está vacía.</div>
-    <div id="buttonsContainer">
-      <button class="hidden" id="fetchButton">Actualizar</button>
-      <button class="hidden" id="clearButton">Limpiar</button>
+    <div id="ignoredUsersTab" class="tab-content">
+      <div id="ignoredListContainer" class="hidden">
+        <span id="copyIcon" class="copy-icon">content_copy</span>
+        <div id="ignoredList"></div>
+      </div>
+      <div id="emptyMessage">La lista de usuarios ignorados está vacía.</div>
+      <div id="buttonsContainer">
+        <button id="fetchButton">Actualizar</button>
+        <button id="clearButton">Limpiar</button>
+      </div>
+    </div>
+    <div id="ignoredWordsTab" class="tab-content hidden">
+      <input type="text" id="wordInput" placeholder="Añadir palabra...">
+      <button id="addWordButton">Añadir</button>
+      <div id="ignoredWordsListContainer">
+        <div id="ignoredWordsList"></div>
+      </div>
+      <div id="wordsEmptyMessage">La lista de palabras está vacía.</div>
+      <div id="wordsButtonsContainer">
+        <button id="clearWordsButton">Limpiar Palabras</button>
+      </div>
     </div>
   </body>
 </html>

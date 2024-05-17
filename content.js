@@ -22,17 +22,36 @@ function removeIgnoredUsersFromShowThread(ignoredUsers) {
   });
 }
 
-// Obtener la lista de usuarios ignorados de chrome.storage
-function updateIgnoredUsers() {
-  chrome.storage.local.get('ignoredUsers', function(data) {
-    if (data.ignoredUsers) {
-      const ignoredUsers = data.ignoredUsers;
-      
-      if (window.location.href.includes('forumdisplay.php')) {
-        removeIgnoredUsersFromForumDisplay(ignoredUsers);
-      } else if (window.location.href.includes('showthread.php')) {
-        removeIgnoredUsersFromShowThread(ignoredUsers);
+// Función para eliminar hilos que contengan palabras no deseadas en forumdisplay.php
+function removeThreadsByWords(words) {
+  const rows = document.querySelectorAll('tbody[id^="threadbits_forum_"] tr');
+  
+  rows.forEach(row => {
+    const threadTitle = row.querySelector('a[id^="thread_title_"]');
+    if (threadTitle) {
+      const titleText = threadTitle.textContent.trim();
+      for (const word of words) {
+        const regex = new RegExp(word, 'i');
+        if (regex.test(titleText)) {
+          row.remove();
+          break;
+        }
       }
+    }
+  });
+}
+
+// Obtener la lista de usuarios ignorados y palabras de chrome.storage
+function updateIgnoredUsersAndWords() {
+  chrome.storage.local.get(['ignoredUsers', 'ignoredWords'], function(data) {
+    const ignoredUsers = data.ignoredUsers || [];
+    const ignoredWords = data.ignoredWords || [];
+    
+    if (window.location.href.includes('forumdisplay.php')) {
+      removeIgnoredUsersFromForumDisplay(ignoredUsers);
+      removeThreadsByWords(ignoredWords);
+    } else if (window.location.href.includes('showthread.php')) {
+      removeIgnoredUsersFromShowThread(ignoredUsers);
     }
   });
 }
@@ -62,7 +81,7 @@ function fetchIgnoredUsers() {
     chrome.storage.local.set({ ignoredUsers: userNames }, function() {
       console.log('Ignored users saved:', userNames);
       // Actualizar la lista de usuarios ignorados en la página actual
-      updateIgnoredUsers();
+      updateIgnoredUsersAndWords();
     });
   })
   .catch(error => {
@@ -76,13 +95,13 @@ if (window.location.href.includes('https://forocoches.com/foro/profile.php?do=do
   fetchIgnoredUsers();
 }
 
-// Escuchar mensajes para actualizar la lista de ignorados
+// Escuchar mensajes para actualizar la lista de ignorados y palabras
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   if (request.action === 'fetchIgnoredUsers') {
     fetchIgnoredUsers();
   } else if (request.action === 'updateIgnoredList') {
-    updateIgnoredUsers();
+    updateIgnoredUsersAndWords();
   }
 });
 
-updateIgnoredUsers();
+updateIgnoredUsersAndWords();
